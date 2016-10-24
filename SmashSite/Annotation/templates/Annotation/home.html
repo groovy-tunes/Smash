@@ -1,0 +1,250 @@
+{% extends "Annotation/header.html" %}
+{% load bootstrap %}
+{% block content %}
+
+{% if user.is_authenticated %}
+{% load staticfiles %}
+<script src = "{% static 'js/characterselect.js' %}"></script>
+<div class="col-md-6 col-md-offset-3">
+	<div class="col-md-3">
+		<button type="button" class="btn btn-default" onclick="show()" id="showBtn">Post a game!</button>
+	</div>
+	<div id="search" class="col-md-3 pull-right">
+		<div class="input-group">
+			<input type="text" class="form-control" placeholder="Search for...">
+			<span class="input-group-btn">
+			<a class="btn btn-default" href="#">Go!</a>
+			</span>
+		</div>
+	</div>
+	<div id="inputWell" class="well">
+		<button type="button" class="btn btn-default" onclick="hide()" id="hideBtn">-</button>
+		<form class="form-horizontal" action="{{ request.path }}" method="post" enctype="multipart/form-data">
+			{% csrf_token %}
+			
+			<div class="form-group">
+				{{ form.title|bootstrap_horizontal }}
+			</div>	
+			<div class="form-group">
+				{{ form.url|bootstrap_horizontal }}
+			</div>
+			<div class="form-group">
+				<div class="col-sm-offset-2 col-sm-8">
+					<!--<input type="submit" class="btn btn-primary" value="Post your game!" onclick="setTags()"></button>-->
+					<input type="submit" class="btn btn-primary" value="Post your game!"></button>
+				</div>
+			</div>
+			<!--I'm not sure whether this function is neccessary, I think users should just search through titles or maybe a better system would be to just add tags through text
+			{{ form.tags }}
+			<!--these are the buttons for the games
+			{% load staticfiles %}
+			<script src = "{% static 'js/characterselect.js' %}"></script>
+			<div id="gameSelect">
+				<div class="row text-center">
+					<div class="center-block">
+						<div class="center cssbutton" id="S64" onclick="setGame(this);"><img src={% static 'images/Smash64/Logo.png' %} class="img-responsive"></div>
+						<div class="center cssbutton" id="Melee" onclick="setGame(this);"><img src={% static 'images/Melee/Logo.png' %} class="img-responsive"></div>
+						<div class="center cssbutton" id="Smash4" onclick="setGame(this);"><img src={% static 'images/Smash4/Logo.png' %} class="img-responsive"></div>
+					</div>
+				</div>
+			</div>
+			
+			<!--these are the Melee icons
+			<div id="MeleeIcons" class="panel panel-default">
+				{% load staticfiles %}
+					<!--I don't think having individual player knowledge is important anymore
+					<div class="row text-center">
+						<div class="center-block">
+							<div class="center cssbutton" id="P1" onclick="setSelector(this);"><img src={% static 'images/P1.png' %} class="img-responsive"></div>
+							<div class="center cssbutton" id="P2" onclick="setSelector(this);"><img src={% static 'images/P2.png' %} class="img-responsive"></div>
+							<div class="center cssbutton" id="P3" onclick="setSelector(this);"><img src={% static 'images/P3.png' %} class="img-responsive"></div>
+							<div class="center cssbutton" id="P4" onclick="setSelector(this);"><img src={% static 'images/P4.png' %} class="img-responsive"></div>
+							<div class="center cssbutton" id="Map" onclick="setSelector(this);"><img src={% static 'images/Melee/Characters/0.png' %} class="img-responsive"></div>
+						</div>
+					</div>
+					<div class="row text-center">
+						<div class="center-block">
+							<div class="center" onclick="setSelection(this)" id="Dr. Mario"><img src={% static 'images/Melee/Characters/0.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="Mario"><img src={% static 'images/Melee/Characters/1.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="Luigi"><img src={% static 'images/Melee/Characters/2.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="Bowser"><img src={% static 'images/Melee/Characters/3.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="Peach"><img src={% static 'images/Melee/Characters/4.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="Yoshi"><img src={% static 'images/Melee/Characters/5.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="DK"><img src={% static 'images/Melee/Characters/6.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="C. Falcon"><img src={% static 'images/Melee/Characters/7.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="Ganondorf"><img src={% static 'images/Melee/Characters/8.png' %} class="img-responsive"></div>
+						</div>
+					</div>
+					<div class="row text-center">
+						<div class="center-block">
+							<div class="center" onclick="setSelection(this)" id="Falco"><img src={% static 'images/Melee/Characters/9.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="Fox"><img src={% static 'images/Melee/Characters/10.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="Ness"><img src={% static 'images/Melee/Characters/11.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="Ice Climbers"><img src={% static 'images/Melee/Characters/12.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="Kirby"><img src={% static 'images/Melee/Characters/13.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="Samus"><img src={% static 'images/Melee/Characters/14.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="Zelda"><img src={% static 'images/Melee/Characters/15.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="Link"><img src={% static 'images/Melee/Characters/16.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="Young Link"><img src={% static 'images/Melee/Characters/17.png' %} class="img-responsive"></div>
+						</div>
+					</div>
+					<div class="row text-center">
+						<div class="center-block">
+							<div class="center"><img src={% static 'images/Melee/Characters/26.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="Pichu"><img src={% static 'images/Melee/Characters/18.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="Pikachu"><img src={% static 'images/Melee/Characters/19.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="Jigglypuff"><img src={% static 'images/Melee/Characters/20.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="Mewtwo"><img src={% static 'images/Melee/Characters/21.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="Game and Watch"><img src={% static 'images/Melee/Characters/22.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="Marth"><img src={% static 'images/Melee/Characters/23.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="Roy"><img src={% static 'images/Melee/Characters/24.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="Sheik"><img src={% static 'images/Melee/Characters/Sheik_SSBM.png' %} class="img-responsive"></div>
+						</div>
+					</div>
+			</div>
+			
+			<!--These are the Smash64 Icons
+			<div id="S64Icons" class="panel panel-default">
+				{% load staticfiles %}
+					<!--
+					<div class="row text-center">
+						<div class="center-block">
+							<div class="center cssbutton" id="P1" onclick="setSelector(this);"><img src={% static 'images/P1.png' %} class="img-responsive"></div>
+							<div class="center cssbutton" id="P2" onclick="setSelector(this);"><img src={% static 'images/P2.png' %} class="img-responsive"></div>
+							<div class="center cssbutton" id="P3" onclick="setSelector(this);"><img src={% static 'images/P3.png' %} class="img-responsive"></div>
+							<div class="center cssbutton" id="P4" onclick="setSelector(this);"><img src={% static 'images/P4.png' %} class="img-responsive"></div>
+							<div class="center cssbutton" id="Map" onclick="setSelector(this);"><img src={% static 'images/Smash64/Characters/0.png' %} class="img-responsive"></div>
+						</div>
+					</div>
+					<div class="row text-center">
+						<div class="center-block">
+							<div class="center" onclick="setSelection(this)" id="Luigi"><img src={% static 'images/Smash64/Characters/8.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="Mario"><img src={% static 'images/Smash64/Characters/0.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="DK"><img src={% static 'images/Smash64/Characters/2.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="Link"><img src={% static 'images/Smash64/Characters/4.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="Samus"><img src={% static 'images/Smash64/Characters/6.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="C.Falcon"><img src={% static 'images/Smash64/Characters/10.png' %} class="img-responsive"></div>
+						</div>
+					</div>
+					<div class="row text-center">
+						<div class="center-block">
+							<div class="center" onclick="setSelection(this)" id="Ness"><img src={% static 'images/Smash64/Characters/9.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="Yoshi"><img src={% static 'images/Smash64/Characters/1.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="Kirby"><img src={% static 'images/Smash64/Characters/3.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="Fox"><img src={% static 'images/Smash64/Characters/5.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="Pikachu"><img src={% static 'images/Smash64/Characters/7.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="Jigglypuff"><img src={% static 'images/Smash64/Characters/11.png' %} class="img-responsive"></div>
+						</div>
+					</div>
+			</div>
+			
+			<!--These are the Smash4 icons
+			<div id="Smash4Icons" class="panel panel-default">
+				{% load staticfiles %}
+					<!--
+					<div class="row text-center">
+						<div class="center-block">
+							<div class="center cssbutton" id="P1" onclick="setSelector(this);"><img src={% static 'images/P1.png' %} class="img-responsive"></div>
+							<div class="center cssbutton" id="P2" onclick="setSelector(this);"><img src={% static 'images/P2.png' %} class="img-responsive"></div>
+							<div class="center cssbutton" id="P3" onclick="setSelector(this);"><img src={% static 'images/P3.png' %} class="img-responsive"></div>
+							<div class="center cssbutton" id="P4" onclick="setSelector(this);"><img src={% static 'images/P4.png' %} class="img-responsive"></div>
+							<div class="center cssbutton" id="Map" onclick="setSelector(this);"><img src={% static 'images/Smash4/Characters/Mario.png' %} class="img-responsive"></div>
+						</div>
+					</div>
+					<div class="row text-center">
+						<div class="center-block">
+							<div class="center" onclick="setSelection(this)" id="Mario"><img src={% static 'images/Smash4/Characters/Mario.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="Luigi"><img src={% static 'images/Smash4/Characters/Luigi.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="Peach"><img src={% static 'images/Smash4/Characters/Peach.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="Bowser"><img src={% static 'images/Smash4/Characters/Bowser.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="Yoshi"><img src={% static 'images/Smash4/Characters/Yoshi.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="Rosalina"><img src={% static 'images/Smash4/Characters/Rosalina.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="Bowser Jr"><img src={% static 'images/Smash4/Characters/Bowser Jr.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="Wario"><img src={% static 'images/Smash4/Characters/Wario.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="DK"><img src={% static 'images/Smash4/Characters/DK.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="Diddy Kong"><img src={% static 'images/Smash4/Characters/Diddy.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="G&W"><img src={% static 'images/Smash4/Characters/G&W.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="Little Mac"><img src={% static 'images/Smash4/Characters/Little Mac.png' %} class="img-responsive"></div>
+						</div>
+					</div>
+					<div class="row text-center">
+						<div class="center-block">
+							<div class="center" onclick="setSelection(this)" id="Link"><img src={% static 'images/Smash4/Characters/Link.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="Zelda"><img src={% static 'images/Smash4/Characters/Zelda.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="Sheik"><img src={% static 'images/Smash4/Characters/Sheik.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="Ganondorf"><img src={% static 'images/Smash4/Characters/Ganon.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="Toon Link"><img src={% static 'images/Smash4/Characters/Toon Link.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="Samus"><img src={% static 'images/Smash4/Characters/Samus.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="Zero Suit Samus"><img src={% static 'images/Smash4/Characters/ZSS.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="Pit"><img src={% static 'images/Smash4/Characters/Pit.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="Palutena"><img src={% static 'images/Smash4/Characters/Palutena.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="Marth"><img src={% static 'images/Smash4/Characters/Marth.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="Ike"><img src={% static 'images/Smash4/Characters/Ike.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="Robin"><img src={% static 'images/Smash4/Characters/Robin.png' %} class="img-responsive"></div>
+						</div>
+					</div>
+					<div class="row text-center">
+						<div class="center-block">
+							<div class="center" onclick="setSelection(this)" id="Duck Hunt"><img src={% static 'images/Smash4/Characters/Duck Hunt.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="Kirby"><img src={% static 'images/Smash4/Characters/Kirby.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="King Dee Dee"><img src={% static 'images/Smash4/Characters/DeeDee.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="Meta Knight"><img src={% static 'images/Smash4/Characters/Meta Knight.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="Fox"><img src={% static 'images/Smash4/Characters/Fox.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="Falco"><img src={% static 'images/Smash4/Characters/Falco.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="Pikachu"><img src={% static 'images/Smash4/Characters/Pikachu.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="Charizard"><img src={% static 'images/Smash4/Characters/Charizard.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="Lucario"><img src={% static 'images/Smash4/Characters/Lucario.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="Jigglypuff"><img src={% static 'images/Smash4/Characters/Jigglypuff.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="Greninja"><img src={% static 'images/Smash4/Characters/Greninja.png' %} class="img-responsive"></div>
+						</div>
+					</div>
+					<div class="row text-center">
+						<div class="center-block">
+							<div class="center" onclick="setSelection(this)" id="Rob"><img src={% static 'images/Smash4/Characters/Rob.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="Ness"><img src={% static 'images/Smash4/Characters/Ness.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="C. falcon"><img src={% static 'images/Smash4/Characters/C.Falcon.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="Villager"><img src={% static 'images/Smash4/Characters/Villager.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="Olimar"><img src={% static 'images/Smash4/Characters/Olimar.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="Wii Fit Trainer"><img src={% static 'images/Smash4/Characters/Wii Fit Trainer.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="Shulk"><img src={% static 'images/Smash4/Characters/Shulk.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="Dr. Mario"><img src={% static 'images/Smash4/Characters/Dr Mario.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="Dark Pit"><img src={% static 'images/Smash4/Characters/Dark Pit.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="Lucina"><img src={% static 'images/Smash4/Characters/Lucina.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="Pac-man"><img src={% static 'images/Smash4/Characters/Pac-man.png' %} class="img-responsive"></div>
+						</div>
+					</div>
+					<div class="row text-center">
+						<div class="center-block">
+							<div class="center" onclick="setSelection(this)" id="Mega Man"><img src={% static 'images/Smash4/Characters/Mega Man.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="Sonic"><img src={% static 'images/Smash4/Characters/Sonic.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="Mewtwo"><img src={% static 'images/Smash4/Characters/Mewtwo.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="Lucas"><img src={% static 'images/Smash4/Characters/Lucas.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="Roy"><img src={% static 'images/Smash4/Characters/Roy.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="Ryu"><img src={% static 'images/Smash4/Characters/Ryu.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="Cloud"><img src={% static 'images/Smash4/Characters/Cloud.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="Corrin"><img src={% static 'images/Smash4/Characters/Corrin.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="Bayonetta"><img src={% static 'images/Smash4/Characters/Bayonetta.png' %} class="img-responsive"></div>
+							<div class="center" onclick="setSelection(this)" id="Mii"><img src={% static 'images/Smash4/Characters/Mii.png' %} class="img-responsive"></div>
+							<div class="center"><img src={% static 'images/Smash4/Characters/26.png' %} class="img-responsive"></div>
+						</div>
+					</div>
+			</div>
+			-->
+		</form>
+	</div>
+</div>
+{% endif %}
+
+{% for vod in object_list %}
+	<div class="col-md-6 col-md-offset-3">
+		<!--<h2><a href="/Annotation/{{ vod.id }}">{{ vod.title }}</a></h2>-->
+		<h2><a href="Annotation{{ vod.id }}">{{ vod.title }}</a></h2>
+		<div class="embed-responsive embed-responsive-16by9">
+		<iframe class="embed-responsive-item"
+		  src="{{ vod.url }}"></iframe>
+		</div>
+	</div>
+{% endfor %}
+
+
+{% endblock %}

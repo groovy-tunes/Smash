@@ -1,0 +1,211 @@
+{% extends "Annotation/header.html" %}
+
+{% block content %}
+
+<script type="text/javascript">
+	//references the youtube api
+	var tag = document.createElement('script');
+	tag.id = 'yt-iframe';
+	tag.src = 'https://www.youtube.com/iframe_api';
+	var firstScriptTag = document.getElementsByTagName('script')[0];
+	firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+	var player;
+	function onYouTubeIframeAPIReady() {
+	/**
+	*Instantiates a new Youtube player when the API has loaded.
+	*/
+		player = new YT.Player('yt-player');
+	}
+
+	function logTime(event){
+	/**
+	*Sets the value of the post's time to the current time of the video.
+	*/
+		document.getElementById("id_time").value = Math.floor(player.getCurrentTime());
+	}
+  
+	function skipTo(time, halfSpeed){
+	/**
+	*Skips video to time and sets playback speed.
+	*@param {time} int: the target time
+	*@param {halfSpeed} boolean: true for 0.5 playback speed, false for 1.0
+	*/
+		player.seekTo(time, true);
+		if(halfSpeed)
+			player.setPlaybackRate(0.5);
+		else
+			player.setPlaybackRate(1);
+		player.pauseVideo();
+	}
+</script>
+<div class="col-md-12" style="width:100%;">
+	<!--The youtube iframe-->
+	<div class="col-md-8">
+		<div id="ytplayer" class="embed-responsive embed-responsive-16by9">
+			<iframe id="yt-player" src="{{ target_vod.url }}?rel=0&enablejsapi=1" ></iframe>
+		</div>
+	</div>
+	<div class="col-md-4">
+		<!--Make a comment-->
+		<div class="row">
+			<div class="input-group">
+				{% if user.is_authenticated %}
+					<form action="{{ request.path }}" method="post" enctype="multipart/form-data">
+						{% csrf_token %}
+						<div class="form-group">
+							<label for="comment">Comment</label>
+							<textarea class="form-control" rows="8" cols="80" id="id_body" name="body"></textarea>
+						</div>
+						{{ form.time }}
+						<input type="submit" name="comment" class="btn btn-primary" onclick="logTime()" value="Post"></button>
+					</form>
+				{% endif %}
+			</div>
+		</div>
+		<!--Comments-->
+		{% if target_posts %}
+		<div class="row">
+			<div class="panel panel-default">
+			<!--Only display something if there are comments-->
+				
+				<div class="row">
+				<div class="col-md-1">
+					Votes
+				</div>
+				<div class="col-md-1">
+					Time
+				</div>
+				<div class="col-md-10">
+					Comment
+				</div>
+				</div>
+				{% for post in target_posts %}
+					<div class="row">
+					<div class="col-md-1">
+						{{post.vote_count}}
+					</div>
+					<div class="col-md-1">
+						<a href="javascript:skipTo({{ post.time }})"><h5>{{ post.formatTime }}</h5></a>
+						<a href="javascript:skipTo({{ post.time }}, true)"><h5>1/2 Speed</h5></a>
+					</div>
+					<div class="col-md-10" >
+						{{post.body|safe|linebreaks}}
+					</div>
+					</div>
+				{% endfor %}
+			
+				<!--
+				<table class="table table-hover">
+					<tr>
+						<th></th>
+						<th>Time</th>
+						<th>Comment</th>
+					</tr>
+					<!--Iterate through model data, displaying the various information
+					{% for post in target_posts %}
+						<tr>
+							<td>
+								<div class="btn-group-vertical" role="group">
+									<a name="up" class="btn btn-default btn-xs" href="Annotationvote{{target_vod.id}}/{{ post.id }}">
+										<span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span>
+										<span class="label label-default">{{ post.vote_count }}</span>
+									</a>
+								</div>
+							</td>
+							<td>
+								<a href="javascript:skipTo({{ post.time }})"><h5>{{ post.formatTime }}</h5></a>
+								<a href="javascript:skipTo({{ post.time }}, true)"><h5>1/2 Speed</h5></a>
+							</td>
+							<td>
+								<div style="overflow:auto">
+									{{ post.body|safe|linebreaks }}
+									{{ post.user.str }}
+								</div>
+							</td>
+						</tr>
+					{% endfor %}
+				</table>
+				-->
+			</div>
+		</div>
+		{% endif %}
+	</div>
+</div>
+
+
+
+
+
+<!--The form for posting new comments
+<div class="row">
+	<div class="col-md-2 col-md-offset-3">
+		<div class="input-group">
+			<!--<span class="input-group-addon">00:00</span>
+			{% if user.is_authenticated %}
+				<form class="form-horizontal" action="{{ request.path }}" method="post" enctype="multipart/form-data">
+					{% csrf_token %}
+					
+					<div class="form-group">
+						{{ form.body }}
+					</div>
+
+					{{ form.time }}
+					
+					<div class="form-horizontal">
+						<input type="submit" name="comment" class="btn btn-primary" onclick="logTime()" value="Post at current time"></button>
+					</div>
+				</form>
+			{% endif %}
+		</div>
+	</div>
+</div>
+
+<!--The youtube iframe
+<div class="row">
+	<div class="col-md-6 col-md-offset-3">
+		<div id="ytplayer" class="embed-responsive embed-responsive-16by9">
+			<iframe id="yt-player" src="{{ target_vod.url }}?rel=0&enablejsapi=1" ></iframe>
+		</div>
+	</div>
+</div>
+
+<!--The comments
+<div class="row">
+	<div class="col-md-6 col-md-offset-3">
+		<div class="panel panel-default">
+			<!--Only display something if there are comments
+			{% if target_posts %}
+				<table class="table table-hover">
+					<tr>
+						<th></th>
+						<th>Time</th>
+						<th>Comment</th>
+					</tr>
+					<!--Iterate through model data, displaying the various information
+					{% for post in target_posts %}
+						<tr>
+							<td>
+								<div class="btn-group-vertical" role="group">
+									<a name="up" class="btn btn-default btn-xs" href="Annotationvote{{target_vod.id}}/{{ post.id }}">
+										<span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span>
+										<span class="label label-default">{{ post.vote_count }}</span>
+									</a>
+								</div>
+							</td>
+							<td>
+								<a href="javascript:skipTo({{ post.time }})"><h5>{{ post.formatTime }}</h5></a>
+								<a href="javascript:skipTo({{ post.time }}, true)"><h5>1/2 Speed</h5></a>
+							</td>
+							<td>
+								{{ post.body|safe|linebreaks }}
+								{{ post.user.str }}
+							</td>
+						</tr>
+					{% endfor %}
+				</table>
+			{% endif %}
+		</div>
+	</div>
+</div>
+{% endblock %}-->

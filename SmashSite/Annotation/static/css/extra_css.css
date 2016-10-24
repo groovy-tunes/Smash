@@ -1,0 +1,64 @@
+.table > tbody >tr > td {
+     vertical-align: middle;
+}
+
+.username-text{
+	color: 	#5F9EA0;
+}
+
+.center{
+	display: inline-block;
+}
+
+.cssbutton{
+	cursor:pointer;
+}
+
+.cssbutton:hover{
+	border: thick solid #ff9800;
+	border-radius: 5px;
+}
+
+#inputWell{
+	display:none;
+}
+
+#MeleeIcons{
+	background-color: #4E5064;
+	display: none;
+}
+
+#S64Icons{
+	background-color: #4E5064;
+	display: none;
+}
+
+#Smash4Icons{
+	background-color: #4E5064;
+	display: none;
+}
+
+#P1:hover{
+	border: thick solid #8B2726;
+	border-radius: 5px;
+}
+
+#P2:hover{
+	border: thick solid #2D2C7A;
+	border-radius: 5px;
+}
+
+#P3:hover{
+	border: thick solid #867909;
+	border-radius: 5px;
+}
+
+#P4:hover{
+	border: thick solid #1D5F22;
+	border-radius: 5px;
+}
+
+#Map:hover{
+	border: thick solid #B7BAC0;
+	border-radius: 5px;
+}
