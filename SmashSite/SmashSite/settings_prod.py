@@ -1,4 +1,4 @@
-from .base import *
+from .settings import *
 
 STATIC_URL = '/static/'
 STATIC_ROOT = '/root/dev/Smash/staticfiles/'
