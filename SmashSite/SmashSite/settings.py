@@ -124,4 +124,4 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 if os.environ.get('DJANGO_PRODUCTION') is not None:
-	from setting_prod import *
+	from settings_prod import *
