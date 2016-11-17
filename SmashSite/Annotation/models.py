@@ -12,6 +12,7 @@ class Post(models.Model):
     votes = VotableManager()
     vote_count = models.IntegerField(default=0)
 
+    #convert the seconds given by youtupe api to more readable format for ux
     def formatTime(self):
         seconds_value = self.time % 60
         seconds = str(seconds_value)
@@ -30,6 +31,12 @@ class Vod(models.Model):
     date = models.DateTimeField(default=timezone.now)
     posts = models.ManyToManyField(Post)
     #tags = models.TextField(max_length=100, default='')
+
+    #used to parse youtube id from urls given by users, used in
+    #thumbnail generation and various other operations
+    #pre-condition: just normal youtube link, not embed
+    def return_youtube_id(self):
+        return self.url[-11:]
     
     def __str__(self):
         return self.user.username + str(self.pk)

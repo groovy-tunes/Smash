@@ -38,12 +38,38 @@
 			player.setPlaybackRate(1);
 		player.pauseVideo();
 	}
+	
+	function showDelete(){
+	/**
+	*Brings up yes or no text to confirm a user wants to delete their post.
+	*/
+		var yesNo = document.getElementsByClassName("confirm");
+		var i;
+		for(i = 0;i < yesNo.length; i++){
+			yesNo[i].style.display = "inline";
+		}
+		document.getElementById("delBtn").style.display = "none";
+	}
+	
+	function hideDelete(){
+	/**
+	*Hides yes or no text for deletion confirmation.
+	*/
+		var yesNo = document.getElementsByClassName("confirm");
+		var i;
+		for(i = 0;i < yesNo.length; i++){
+			yesNo[i].style.display = "none";
+		}
+		document.getElementById("delBtn").style.display = "inline";
+	}
 </script>
+
+
 <div class="col-md-12" style="width:100%;">
 	<!--The youtube iframe-->
 	<div class="col-md-8">
 		<div id="ytplayer" class="embed-responsive embed-responsive-16by9">
-			<iframe id="yt-player" src="{{ target_vod.url }}?rel=0&enablejsapi=1" ></iframe>
+			<iframe id="yt-player" src="https://www.youtube.com/embed/{{ target_vod.return_youtube_id }}?rel=0&enablejsapi=1" ></iframe>
 		</div>
 	</div>
 	<div class="col-md-4">
@@ -63,149 +89,37 @@
 				{% endif %}
 			</div>
 		</div>
-		<!--Comments-->
+		<!--Comments, only display if there exists comments-->
 		{% if target_posts %}
-		<div class="row">
-			<div class="panel panel-default">
-			<!--Only display something if there are comments-->
-				
+		{% for post in target_posts %}
+			<div class="post-box">
 				<div class="row">
-				<div class="col-md-1">
-					Votes
-				</div>
-				<div class="col-md-1">
-					Time
-				</div>
-				<div class="col-md-10">
-					Comment
-				</div>
-				</div>
-				{% for post in target_posts %}
 					<div class="row">
-					<div class="col-md-1">
-						{{post.vote_count}}
+						<p>
+							<a name="up" class="btn btn-default btn-xs" href="Annotationvote{{target_vod.id}}/{{ post.id }}"><span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span></a>
+							<a href="Profile{{ post.user.id }}">{{post.user.username}}</a> &nbsp;&nbsp; {{post.vote_count}} votes {{post.date|timesince}} ago
+							<!--a delete button if the poster is the current user-->
+							{% if user.is_authenticated %}
+								{% if user.id == post.user.id %}
+									<button type="button" class="btn btn-default btn-xs" id="delBtn" onClick="showDelete()">Delete</button>
+									<a href="Annotationdelete{{target_vod.id}}/{{ post.id }}" class="confirm">yes</a> 
+									<a href="#" class="confirm" onClick="hideDelete()">no</a>
+								{% endif %}
+							{% endif %}
+						</p>
 					</div>
-					<div class="col-md-1">
-						<a href="javascript:skipTo({{ post.time }})"><h5>{{ post.formatTime }}</h5></a>
-						<a href="javascript:skipTo({{ post.time }}, true)"><h5>1/2 Speed</h5></a>
-					</div>
-					<div class="col-md-10" >
+					<div class="row">
 						{{post.body|safe|linebreaks}}
 					</div>
+					<div class="row">
+						<p>
+							<a href="javascript:skipTo({{ post.time }})" class="time-control">{{ post.formatTime }}</a> | <a href="javascript:skipTo({{ post.time }}, true)" class="time-control">Half Speed</a>
+						</p>
 					</div>
-				{% endfor %}
-			
-				<!--
-				<table class="table table-hover">
-					<tr>
-						<th></th>
-						<th>Time</th>
-						<th>Comment</th>
-					</tr>
-					<!--Iterate through model data, displaying the various information
-					{% for post in target_posts %}
-						<tr>
-							<td>
-								<div class="btn-group-vertical" role="group">
-									<a name="up" class="btn btn-default btn-xs" href="Annotationvote{{target_vod.id}}/{{ post.id }}">
-										<span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span>
-										<span class="label label-default">{{ post.vote_count }}</span>
-									</a>
-								</div>
-							</td>
-							<td>
-								<a href="javascript:skipTo({{ post.time }})"><h5>{{ post.formatTime }}</h5></a>
-								<a href="javascript:skipTo({{ post.time }}, true)"><h5>1/2 Speed</h5></a>
-							</td>
-							<td>
-								<div style="overflow:auto">
-									{{ post.body|safe|linebreaks }}
-									{{ post.user.str }}
-								</div>
-							</td>
-						</tr>
-					{% endfor %}
-				</table>
-				-->
+				</div>
 			</div>
-		</div>
+		{% endfor %}
 		{% endif %}
 	</div>
 </div>
-
-
-
-
-
-<!--The form for posting new comments
-<div class="row">
-	<div class="col-md-2 col-md-offset-3">
-		<div class="input-group">
-			<!--<span class="input-group-addon">00:00</span>
-			{% if user.is_authenticated %}
-				<form class="form-horizontal" action="{{ request.path }}" method="post" enctype="multipart/form-data">
-					{% csrf_token %}
-					
-					<div class="form-group">
-						{{ form.body }}
-					</div>
-
-					{{ form.time }}
-					
-					<div class="form-horizontal">
-						<input type="submit" name="comment" class="btn btn-primary" onclick="logTime()" value="Post at current time"></button>
-					</div>
-				</form>
-			{% endif %}
-		</div>
-	</div>
-</div>
-
-<!--The youtube iframe
-<div class="row">
-	<div class="col-md-6 col-md-offset-3">
-		<div id="ytplayer" class="embed-responsive embed-responsive-16by9">
-			<iframe id="yt-player" src="{{ target_vod.url }}?rel=0&enablejsapi=1" ></iframe>
-		</div>
-	</div>
-</div>
-
-<!--The comments
-<div class="row">
-	<div class="col-md-6 col-md-offset-3">
-		<div class="panel panel-default">
-			<!--Only display something if there are comments
-			{% if target_posts %}
-				<table class="table table-hover">
-					<tr>
-						<th></th>
-						<th>Time</th>
-						<th>Comment</th>
-					</tr>
-					<!--Iterate through model data, displaying the various information
-					{% for post in target_posts %}
-						<tr>
-							<td>
-								<div class="btn-group-vertical" role="group">
-									<a name="up" class="btn btn-default btn-xs" href="Annotationvote{{target_vod.id}}/{{ post.id }}">
-										<span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span>
-										<span class="label label-default">{{ post.vote_count }}</span>
-									</a>
-								</div>
-							</td>
-							<td>
-								<a href="javascript:skipTo({{ post.time }})"><h5>{{ post.formatTime }}</h5></a>
-								<a href="javascript:skipTo({{ post.time }}, true)"><h5>1/2 Speed</h5></a>
-							</td>
-							<td>
-								{{ post.body|safe|linebreaks }}
-								{{ post.user.str }}
-							</td>
-						</tr>
-					{% endfor %}
-				</table>
-			{% endif %}
-		</div>
-	</div>
-</div>
-{% endblock %}-->
+{% endblock %}

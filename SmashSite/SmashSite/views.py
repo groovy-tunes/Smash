@@ -1,7 +1,8 @@
-from .forms import UserForm
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.views.generic import View
+from .forms import UserForm
+from django.contrib import messages
 
 def index(request):
     template_name = 'SmashSite/index.html'
@@ -13,14 +14,18 @@ def register(request):
     if form.is_valid():
         user = form.save(commit=False)
         username = form.cleaned_data['username']
-        password = form.cleaned_data['password']
+        password = form.cleanPassword2()
+        email = form.cleaned_data['email']
+        
         user.set_password(password)
         user.save()
         user = authenticate(username=username, password=password)
+        
         if user is not None:
             if user.is_active:
                 login(request, user)
-                return render(request, 'SmashSite/index.html')
+                return redirect("Annotation-feed")
+    
     context = {
         "form": form,
     }
@@ -35,7 +40,7 @@ def login_user(request):
         if user is not None:
             if user.is_active:
                 login(request, user)
-                return render(request, 'SmashSite/index.html')
+                return redirect("Annotation-feed")
             else:
                 return render(request, 'SmashSite/login.html', {'error_message': 'Your account has been disabled'})
         else:

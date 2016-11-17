@@ -68,7 +68,7 @@ def vote(request,vkey, key):
         raise Http404("Post does not exist")
     
     if user is not None:
-        #retrieve all the posts that this user has voted on
+        #user can only upvote or remove previous vote
         if target_post.votes.exists(user.id):
             target_post.votes.down(user.id)
         else:
@@ -78,4 +78,36 @@ def vote(request,vkey, key):
             
     return redirect(post, key=int(vkey))
             
+def delete(request, vkey, key):
+    user = request.user
+    try:
+        target_post = Post.objects.get(pk=int(key))
+    except Post.DoesNotExist:
+        raise Http404("Post does not exist")
+
+    if user is not None:
+        target_post.delete()
+
+    return redirect(post, key=int(vkey))
+        
+def delete_vod(request, vkey):
+    user = request.user
+    try:
+        target_vod = Vod.objects.get(pk=int(vkey))
+    except Vod.DoesNotExist:
+        raise Http404("Vod does not exist")
+
+    if user is not None:
+        all_posts = target_vod.posts.all()
+        all_posts.delete()
+        target_vod.delete()
+
+    return redirect("Annotation-feed")
+
+def search(request, search_text):
+    search_vods = Vod.objects.filter(title__contains=search_text).order_by("-date")
+    form = VodForm()
+    context = {'object_list':search_vods, 'form':form}
+    
+    return render(request, 'Annotation/search.html', context)
     

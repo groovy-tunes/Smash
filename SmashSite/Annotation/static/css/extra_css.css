@@ -23,6 +23,25 @@
 	display:none;
 }
 
+.post-box{
+	padding-right: 16px;
+	padding-top: 10px;
+	padding-left: 16px;
+}
+
+.time-control{
+	color:#808080;
+}
+
+.confirm{
+	color:red;
+	display:none;
+}
+
+.confirm:hover{
+	color:red;
+}
+/*
 #MeleeIcons{
 	background-color: #4E5064;
 	display: none;
@@ -62,3 +81,4 @@
 	border: thick solid #B7BAC0;
 	border-radius: 5px;
 }
+*/
