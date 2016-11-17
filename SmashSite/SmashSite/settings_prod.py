@@ -1,4 +1,4 @@
 STATIC_URL = '/static/'
-STATIC_ROOT = '/home/root/dev/Smash/staticfiles/'
+STATIC_ROOT = '/root/dev/Smash/staticfiles/'
 ALLOWED_HOSTS = ['vods.jeremychinsen.me']
 DEBUG = False
