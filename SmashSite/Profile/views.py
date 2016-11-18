@@ -23,6 +23,5 @@ def profile(request, key):
     #this retrieves all the vods the user has posted
     user_vods = target_user.vod_set.all().order_by("-date")
 
-    #context = {'user': target_user, 'total_list': total_list, 'user_vods':user_vods}
-    context = {'user': target_user, 'vods_list' : vods, 'user_vods':user_vods}
+    context = {'target_user': target_user, 'vods_list' : vods, 'user_vods':user_vods}
     return render(request, 'Profile/home.html', context)

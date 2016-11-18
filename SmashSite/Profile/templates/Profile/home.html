@@ -31,7 +31,7 @@
 	<div class="row">
 		<p>
 		<h3>
-			{{user.username}}
+			{{target_user.username}}
 		</h3>
 		</p>
 	</div>
@@ -75,6 +75,8 @@
 					<!--a delete button if the poster is the current user-->
 					{% if user.is_authenticated %}
 						{% if user.id == vod.user.id %}
+							{{ user.id }}
+					{{ vod.user.id }}
 							<button type="button" class="btn btn-default btn-xs" id="delBtn" onClick="showDelete()">Delete</button>
 							<a href="AnnotationdeleteVod{{vod.id}}" class="confirm">yes</a> 
 							<a href="#" class="confirm" onClick="hideDelete()">no</a>
