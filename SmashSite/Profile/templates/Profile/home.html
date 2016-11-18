@@ -69,8 +69,8 @@
 		<h2 style="text-align:center;">Video History</h2>
 		{% for vod in user_vods %}
 			<div class="col-xs-6 col-md-3">
-				<h2 style="display:inline"><a href="Annotation{{ vod.id }}">{{ vod.title }}</a></h2>
-					<p style="display:inline;">
+				<h2><a href="Annotation{{ vod.id }}">{{ vod.title }}</a></h2>
+				<p>
 					<a href="Profile{{ vod.user.id }}">{{vod.user.username}}</a> {{vod.date|timesince}} ago
 					<!--a delete button if the poster is the current user-->
 					{% if user.is_authenticated %}
@@ -82,10 +82,10 @@
 							<a href="#" class="confirm" onClick="hideDelete()">no</a>
 						{% endif %}
 					{% endif %}
-					</p>
-					<a href="Annotation{{ vod.id }}" class="thumbnail">
-						<img src="https://img.youtube.com/vi/{{ vod.return_youtube_id }}/mqdefault.jpg">
-					</a>
+				</p>
+				<a href="Annotation{{ vod.id }}" class="thumbnail">
+					<img src="https://img.youtube.com/vi/{{ vod.return_youtube_id }}/mqdefault.jpg">
+				</a>
 			</div>
 		{% endfor %}
 	</div>
