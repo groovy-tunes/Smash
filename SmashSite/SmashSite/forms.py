@@ -1,12 +1,14 @@
 from django.contrib.auth.models import User
 from django import forms
+from captcha.fields import ReCaptchaField
 
 class UserForm(forms.ModelForm):
     username = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control','placeholder':'Username'}))
     email = forms.EmailField(widget=forms.TextInput(attrs={'class':'form-control','placeholder':'Email'}))
     password = forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control','placeholder':'Pasword'}))
     cfmpassword = forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control','placeholder':'Confirm pasword'}))
-
+    captcha = ReCaptchaField()
+    
     error_messages = {
         'empty_pass': 'Must confirm password',
         'not_matching': "The passwords don't match",
@@ -14,7 +16,7 @@ class UserForm(forms.ModelForm):
 	
     class Meta:
         model = User
-        fields = ['username', 'email', 'password', 'cfmpassword']
+        fields = ['username', 'email', 'password', 'cfmpassword', 'captcha']
 
     def __str__(self):
         return self.user.username
