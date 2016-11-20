@@ -54,7 +54,7 @@ def vod(request, page):
                 current_vod = form.save(commit=False)
                 current_vod.user = user
                 current_vod.save()
-                return HttpResponseRedirect(reverse("Annotation-feed"))
+                return HttpResponseRedirect(reverse("Annotation-feed", page=0))
             else:
                 print(form.errors)
     else:     
@@ -116,7 +116,7 @@ def delete_vod(request, vkey):
         all_posts.delete()
         target_vod.delete()
 
-    return redirect("Annotation-feed")
+    return redirect("Annotation-feed", page=0)
 
 def search(request, search_text):
     search_vods = Vod.objects.filter(title__contains=search_text).order_by("-date")
