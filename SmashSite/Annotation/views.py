@@ -5,6 +5,7 @@ from Annotation.forms import PostForm, VodForm
 import datetime
 from django.http import HttpResponseRedirect, Http404
 from django.urls import reverse
+import math
 
 def post(request, key):
     #retrieves the specific vod object
@@ -37,9 +38,12 @@ def post(request, key):
 
     return render(request, 'Annotation/post.html', context)
     
-def vod(request):
-    #acquires 25 vods
-    queryset = Vod.objects.all().order_by("-date")[:25]
+def vod(request, page):
+    #acquires 24 vods
+    page = int(page)
+    start = page * 24
+    end = start + 24
+    queryset = Vod.objects.all().order_by("-date")[start:end]
 
     
     if request.method == "POST":
@@ -55,7 +59,17 @@ def vod(request):
                 print(form.errors)
     else:     
         form = VodForm()
-    context = {'object_list':queryset, 'form':form}
+
+    #used to determine whether to display pages
+    pages = Vod.objects.all().count()
+    previous = False
+    after = False
+    if (pages - (page + 1) *24) > 0:
+        previous = True
+    if pages > (page + 1) * 24:
+        after = True
+    
+    context = {'object_list':queryset, 'form':form, 'page':page, 'previous':previous, 'after':after}
 
     return render(request, 'Annotation/home.html', context)
 
