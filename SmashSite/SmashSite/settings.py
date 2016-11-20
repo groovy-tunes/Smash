@@ -21,12 +21,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-#SECRET_KEY = environ['SECRET_KEY']
-SECRET_KEY = '_*(5s#x=+e&3(%(=6jroao@ft7440trx=m*6@!f0!6t0o!ns%3'
+SECRET_KEY = environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-#DEBUG = False
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
 
@@ -48,7 +46,7 @@ INSTALLED_APPS = [
 
 #Settings for reCAPTCHA
 RECAPTCHA_PUBLIC_KEY = '6LcvcgwUAAAAAMvGbly6p2AfTPPLjhBJBsRTAH8w'
-RECAPTCHA_PRIVATE_KEY = '6LcvcgwUAAAAAGccIWbEo9OuqJzklhtSwZAsSgtY'
+RECAPTCHA_PRIVATE_KEY = environ['RECAPTCHA_KEY']
 NOCAPTCHA = True
 
 MIDDLEWARE = [
