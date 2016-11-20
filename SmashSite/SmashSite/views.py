@@ -24,7 +24,7 @@ def register(request):
         if user is not None:
             if user.is_active:
                 login(request, user)
-                return redirect("Annotation-feed")
+                return redirect("Annotation-feed", page=0)
     
     context = {
         "form": form,
@@ -40,7 +40,7 @@ def login_user(request):
         if user is not None:
             if user.is_active:
                 login(request, user)
-                return redirect("Annotation-feed")
+                return redirect("Annotation-feed", page=0)
             else:
                 return render(request, 'SmashSite/login.html', {'error_message': 'Your account has been disabled'})
         else:
