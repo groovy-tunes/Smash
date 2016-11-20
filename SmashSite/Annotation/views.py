@@ -54,7 +54,7 @@ def vod(request, page):
                 current_vod = form.save(commit=False)
                 current_vod.user = user
                 current_vod.save()
-                return HttpResponseRedirect(reverse("Annotation-feed", page=0))
+                return HttpResponseRedirect(reverse("Annotation-feed", kwargs={'page':0}))
             else:
                 print(form.errors)
     else:     
@@ -64,7 +64,7 @@ def vod(request, page):
     pages = Vod.objects.all().count()
     previous = False
     after = False
-    if (pages - (page + 1) *24) > 0:
+    if (page - 1) >= 0:
         previous = True
     if pages > (page + 1) * 24:
         after = True

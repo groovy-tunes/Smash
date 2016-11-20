@@ -99,12 +99,14 @@
 </div>
 
 <div class="row">
-{% if previous %}
-	<a href="Annotationpage{{ page|add:'-1' }}">Prev</a>
-{% endif %}
-{% if after %}
-	<a href="Annotationpage{{ page|add:1 }}">Next</a>
-{% endif %}
+	<p style="text-align:center">
+		{% if previous %}
+			<a href="Annotationpage{{ page|add:'-1' }}">Prev</a>
+		{% endif %}
+		{% if after %}
+			<a href="Annotationpage{{ page|add:1 }}">Next</a>
+		{% endif %}
+	</p>
 </div>
 
 {% endblock %}
