@@ -3,112 +3,82 @@
 {% block content %}
 
 {% load staticfiles %}
-<script src = "{% static 'js/characterselect.js' %}"></script>
-<script type="text/javascript">
-	function showDelete(){
-		/**
-		*Brings up yes or no text to confirm a user wants to delete their post.
-		*/
-		var yesNo = document.getElementsByClassName("confirm");
-		var i;
-		for(i = 0;i < yesNo.length; i++){
-			yesNo[i].style.display = "inline";
-		}
-		document.getElementById("delBtn").style.display = "none";
-	}
-	
-	function hideDelete(){
-		/**
-		*Hides yes or no text for deletion confirmation.
-		*/
-		var yesNo = document.getElementsByClassName("confirm");
-		var i;
-		for(i = 0;i < yesNo.length; i++){
-			yesNo[i].style.display = "none";
-		}
-		document.getElementById("delBtn").style.display = "inline";
-	}
-	
-	function search(){
-		/**
-		*Takes the search from the text area and redirects the page to the search URL.
-		*/
-		var value = document.getElementById("searchBox").value;
-		var searchText = "AnnotationSearch";
-		location.href = searchText + value;
-	}
-</script>
-<div class="row">
-	<div class="col-md-6 col-md-offset-3">
-		{% if user.is_authenticated %}
-			<div class="col-md-3">
-				<button type="button" class="btn btn-default" onclick="show()" id="showBtn">Post a game!</button>
-			</div>
-		{% endif %}
-		<div id="search" class="col-md-3 pull-right">
-			<div class="input-group">
-				<input id="searchBox" type="text" class="form-control" placeholder="Search for...">
-				<span class="input-group-btn">
-					<button class="btn btn-default" onclick="search()">Go!</button>
-				</span>
-			</div>
-		</div>
-		<div id="inputWell" class="well">
-			<button type="button" class="btn btn-default" onclick="hide()" id="hideBtn">-</button>
-			<form class="form-horizontal" action="{{ request.path }}" method="post" enctype="multipart/form-data">
-				{% csrf_token %}
-				
-				<div class="form-group">
-					{{ form.title|bootstrap_horizontal }}
-				</div>	
-				<div class="form-group">
-					{{ form.url|bootstrap_horizontal }}
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-6 col-md-offset-3">
+			{% if user.is_authenticated %}
+				<div class="col-md-3">
+					<button type="button" class="btn btn-default" onclick="show()" id="showBtn">Post a game!</button>
 				</div>
-				<div class="form-group">
-					<div class="col-sm-offset-2 col-sm-5">
-						{{form.captcha}}
-						
-					</div>
-					<div class="col-sm-2">
-						<input type="submit" class="btn btn-primary" value="Post your game!"></button>
-					</div>
+			{% endif %}
+			<div id="search" class="col-md-3 pull-right">
+				<div class="input-group">
+					<input id="searchBox" type="text" class="form-control" placeholder="Search for...">
+					<span class="input-group-btn">
+						<button class="btn btn-default" onclick="search()">Go!</button>
+					</span>
 				</div>
-			</form>
+			</div>
+			<!-- Video submission form, not visible by defualt -->
+			<div id="inputWell" class="well">
+				<button type="button" class="btn btn-default" onclick="hide()" id="hideBtn">-</button>
+				<form class="form-horizontal" action="{{ request.path }}" method="post" enctype="multipart/form-data">
+					{% csrf_token %}
+
+					<div class="form-group">
+						{{ form.title|bootstrap_horizontal }}
+					</div>
+					<div class="form-group">
+						{{ form.url|bootstrap_horizontal }}
+					</div>
+					<div class="form-group">
+						<div class="col-sm-offset-2 col-sm-5">
+							{{form.captcha}}
+
+						</div>
+						<div class="col-sm-2">
+							<input type="submit" class="btn btn-primary" value="Post your game!"></button>
+						</div>
+					</div>
+				</form>
+			</div>
 		</div>
 	</div>
-</div>
 
-<div class="row">
-{% for vod in object_list %}
-	<div class="col-xs-6 col-md-3">
-		<h2><a href="Annotation{{ vod.id }}">{{ vod.title }}</a></h2>
-		<p>
-			<a href="Profile{{ vod.user.id }}">{{vod.user.username}}</a> {{vod.date|timesince}} ago
-			<!--a delete button if the poster is the current user-->
-			{% if user.is_authenticated %}
-				{% if user.id == vod.user.id %}
-					<button type="button" class="btn btn-default btn-xs" id="delBtn" onClick="showDelete()">Delete</button>
-					<a href="AnnotationdeleteVod{{vod.id}}" class="confirm">yes</a> 
-					<a href="#" class="confirm" onClick="hideDelete()">no</a>
+	<div class="row">
+	<!-- Lists vods -->
+	{% for vod in object_list %}
+		<div class="col-xs-6 col-md-3">
+			<h2><a href="Annotation{{ vod.id }}">{{ vod.title }}</a></h2>
+			<p>
+				<a href="Profile{{ vod.user.id }}">{{vod.user.username}}</a> {{vod.date|timesince}} ago
+				<!--a delete button if the poster is the current user-->
+				{% if user.is_authenticated %}
+					{% if user.id == vod.user.id %}
+						<button type="button" class="btn btn-default btn-xs" id="delBtn" onClick="showDelete()">Delete</button>
+						<a href="AnnotationdeleteVod{{vod.id}}" class="confirm">yes</a>
+						<a href="#" class="confirm" onClick="hideDelete()">no</a>
+					{% endif %}
 				{% endif %}
+			</p>
+			<a href="Annotation{{ vod.id }}" class="thumbnail">
+			  <img src="https://img.youtube.com/vi/{{ vod.return_youtube_id }}/mqdefault.jpg">
+			</a>
+		</div>
+	{% endfor %}
+	</div>
+
+	<div class="row">
+		<p style="text-align:center">
+			{% if previous %}
+				<a href="Annotationpage{{ page|add:'-1' }}">Prev</a>
+			{% endif %}
+			{% if after %}
+				<a href="Annotationpage{{ page|add:1 }}">Next</a>
 			{% endif %}
 		</p>
-		<a href="Annotation{{ vod.id }}" class="thumbnail">
-		  <img src="https://img.youtube.com/vi/{{ vod.return_youtube_id }}/mqdefault.jpg">
-		</a>
 	</div>
-{% endfor %}
 </div>
-
-<div class="row">
-	<p style="text-align:center">
-		{% if previous %}
-			<a href="Annotationpage{{ page|add:'-1' }}">Prev</a>
-		{% endif %}
-		{% if after %}
-			<a href="Annotationpage{{ page|add:1 }}">Next</a>
-		{% endif %}
-	</p>
-</div>
-
+<script src = "{% static 'js/characterselect.js' %}"></script>
+<script src = "{% static 'js/homescript.js' %}"></script>
 {% endblock %}

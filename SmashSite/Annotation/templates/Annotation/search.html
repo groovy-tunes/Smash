@@ -1,31 +1,31 @@
 {% extends "Annotation/header.html" %}
 {% load bootstrap %}
 {% block content %}
-
-{% if object_list %}
-	<div class="row">
-	{% for vod in object_list %}
-		<div class="col-xs-6 col-md-3">
-			<h2 style="display:inline"><a href="Annotation{{ vod.id }}">{{ vod.title }}</a></h2>
-			<p style="display:inline;">
-				<a href="Profile{{ vod.user.id }}">{{vod.user.username}}</a> {{vod.date|timesince}} ago
-				<!--a delete button if the poster is the current user-->
-				{% if user.is_authenticated %}
-					{% if user.id == vod.user.id %}
-						<button type="button" class="btn btn-default btn-xs" id="delBtn" onClick="showDelete()">Delete</button>
-						<a href="AnnotationdeleteVod{{vod.id}}" class="confirm">yes</a> 
-						<a href="#" class="confirm" onClick="hideDelete()">no</a>
+<div class="container-fluid">
+	{% if object_list %}
+		<div class="row">
+		{% for vod in object_list %}
+			<div class="col-xs-6 col-md-3">
+				<h2 style="display:inline"><a href="Annotation{{ vod.id }}">{{ vod.title }}</a></h2>
+				<p style="display:inline;">
+					<a href="Profile{{ vod.user.id }}">{{vod.user.username}}</a> {{vod.date|timesince}} ago
+					<!--a delete button if the poster is the current user-->
+					{% if user.is_authenticated %}
+						{% if user.id == vod.user.id %}
+							<button type="button" class="btn btn-default btn-xs" id="delBtn" onClick="showDelete()">Delete</button>
+							<a href="AnnotationdeleteVod{{vod.id}}" class="confirm">yes</a>
+							<a href="#" class="confirm" onClick="hideDelete()">no</a>
+						{% endif %}
 					{% endif %}
-				{% endif %}
-			</p>
-			<a href="Annotation{{ vod.id }}" class="thumbnail">
-			  <img src="https://img.youtube.com/vi/{{ vod.return_youtube_id }}/mqdefault.jpg">
-			</a>
+				</p>
+				<a href="Annotation{{ vod.id }}" class="thumbnail">
+				  <img src="https://img.youtube.com/vi/{{ vod.return_youtube_id }}/mqdefault.jpg">
+				</a>
+			</div>
+		{% endfor %}
 		</div>
-	{% endfor %}
-	</div>
-{% else %}
-	<h1 style="text-align:center;">No vods found!</h1>
-{% endif %}
-
+	{% else %}
+		<h1 style="text-align:center;">No vods found!</h1>
+	{% endif %}
+</div>
 {% endblock %}

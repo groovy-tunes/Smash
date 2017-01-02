@@ -1,31 +1,7 @@
 {% extends "Annotation/header.html" %}
 
 {% block content %}
-<script type="text/javascript">
-	function showDelete(){
-	/**
-	*Brings up yes or no text to confirm a user wants to delete their post.
-	*/
-	var yesNo = document.getElementsByClassName("confirm");
-	var i;
-	for(i = 0;i < yesNo.length; i++){
-		yesNo[i].style.display = "inline";
-	}
-	document.getElementById("delBtn").style.display = "none";
-}
-	
-	function hideDelete(){
-		/**
-		*Hides yes or no text for deletion confirmation.
-		*/
-		var yesNo = document.getElementsByClassName("confirm");
-		var i;
-		for(i = 0;i < yesNo.length; i++){
-			yesNo[i].style.display = "none";
-		}
-		document.getElementById("delBtn").style.display = "inline";
-	}
-</script>
+<div class="container-fluid">
 <!--The header for the user-->
 <div class="col-md-6 col-md-offset-3">
 	<div class="row">
@@ -36,7 +12,7 @@
 		</p>
 	</div>
 </div>
-	
+
 <!--This panel is for the user's videos that he/she commented on-->
 <div class="col-md-12">
 	<div class="row panel panel-default">
@@ -50,7 +26,7 @@
 					{% if user.is_authenticated %}
 						{% if user.id == vod.user.id %}
 							<button type="button" class="btn btn-default btn-xs" id="delBtn" onClick="showDelete()">Delete</button>
-							<a href="AnnotationdeleteVod{{vod.id}}" class="confirm">yes</a> 
+							<a href="AnnotationdeleteVod{{vod.id}}" class="confirm">yes</a>
 							<a href="#" class="confirm" onClick="hideDelete()">no</a>
 						{% endif %}
 					{% endif %}
@@ -62,7 +38,7 @@
 			{% endfor %}
 	</div>
 </div>
-	
+
 <!--This panel is for the user's videos that he/she has posted-->
 <div class="col-md-12">
 	<div class="row panel panel-default">
@@ -78,7 +54,7 @@
 							{{ user.id }}
 					{{ vod.user.id }}
 							<button type="button" class="btn btn-default btn-xs" id="delBtn" onClick="showDelete()">Delete</button>
-							<a href="AnnotationdeleteVod{{vod.id}}" class="confirm">yes</a> 
+							<a href="AnnotationdeleteVod{{vod.id}}" class="confirm">yes</a>
 							<a href="#" class="confirm" onClick="hideDelete()">no</a>
 						{% endif %}
 					{% endif %}
@@ -90,5 +66,7 @@
 		{% endfor %}
 	</div>
 </div>
+<script src = "{% static 'js/profilescript.js' %}"></script>
+<div>
 
 {% endblock %}
