@@ -1,0 +1,30 @@
+body {
+    background: url('../images/marth.png');
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-attachment: fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+h4{
+    color: white;
+}
+
+#comment-box{
+    padding: 2em 2em 2em 2em;
+}
+
+#comment-form{
+    margin-bottom: 14.5em;
+}
+
+#comment-pane{
+    padding-left: 2em;
+}
+
+.home-page{
+    color: white;
+}

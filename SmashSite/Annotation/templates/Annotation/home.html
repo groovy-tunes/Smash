@@ -1,7 +1,9 @@
 {% extends "Annotation/header.html" %}
 {% load bootstrap %}
-{% block content %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/post.css' %}" type="text/css"/>
 
+{% block content %}
 <div class="container-fluid">
 	<div class="row">
 		<div class="col-md-6 col-md-offset-3">
@@ -48,15 +50,15 @@
 	<!-- Lists vods -->
 	{% for vod in object_list %}
 		<div class="col-xs-6 col-md-3">
-			<h2><a href="Annotation{{ vod.id }}">{{ vod.title }}</a></h2>
+			<h2><a class="home-page" href="Annotation{{ vod.id }}">{{ vod.title }}</a></h2>
 			<p>
-				<a href="Profile{{ vod.user.id }}">{{vod.user.username}}</a> {{vod.date|timesince}} ago
+				<a class="home-page" href="Profile{{ vod.user.id }}">{{vod.user.username}}</a> {{vod.date|timesince}} ago
 				<!--a delete button if the poster is the current user-->
 				{% if user.is_authenticated %}
 					{% if user.id == vod.user.id %}
 						<button type="button" class="btn btn-default btn-xs" id="delBtn" onClick="showDelete()">Delete</button>
-						<a href="AnnotationdeleteVod{{vod.id}}" class="confirm">yes</a>
-						<a href="#" class="confirm" onClick="hideDelete()">no</a>
+						<a href="AnnotationdeleteVod{{vod.id}}" class="confirm home-page">yes</a>
+						<a href="#" class="confirm home-page" onClick="hideDelete()">no</a>
 					{% endif %}
 				{% endif %}
 			</p>

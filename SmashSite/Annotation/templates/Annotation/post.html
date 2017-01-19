@@ -1,7 +1,5 @@
 {% extends "Annotation/header.html" %}
 
-
-
 {% block content %}
 <div class="container-fluid">
 	<div class="col-md-12" style="width:100%;">
@@ -12,58 +10,61 @@
 			</div>
 		</div>
 		<div class="col-md-4">
-			<!--Make a comment-->
-			<div class="row">
-				<div class="input-group">
-					{% if user.is_authenticated %}
+			{% if user.is_authenticated %}
+			<!--Comment Box-->
+				<div class="row panel" id="comment-box">
+					<div class="input-group">
 						<form action="{{ request.path }}" method="post" enctype="multipart/form-data">
 							{% csrf_token %}
-							<div class="form-group">
+							<div class="form-group" id="comment-form">
 								<label for="comment">Comment</label>
 								<textarea class="form-control" rows="8" cols="80" id="id_body" name="body"></textarea>
 							</div>
 							<div class="form-group">
+								<div class="col-sm-7">
 									{{ form.captcha }}
-								<div class="col-sm-2 col-sm-offset-6">
+								</div>
+								<div class="col-sm-2 col-sm-offset-1">
 									<input type="submit" name="comment" class="btn btn-primary" onclick="logTime()" value="Post"></button>
 								</div>
 							</div>
 							{{ form.time }}
-
 						</form>
-					{% endif %}
-				</div>
-			</div>
-			<!--Comments, only display if there exists comments-->
-			{% if target_posts %}
-			{% for post in target_posts %}
-				<div class="post-box">
-					<div class="row">
-						<div class="row">
-							<p>
-								<a name="up" class="btn btn-default btn-xs" href="Annotationvote{{target_vod.id}}/{{ post.id }}"><span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span></a>
-								<a href="Profile{{ post.user.id }}">{{post.user.username}}</a> &nbsp;&nbsp; {{post.vote_count}} votes {{post.date|timesince}} ago
-								<!--a delete button if the poster is the current user-->
-								{% if user.is_authenticated %}
-									{% if user.id == post.user.id %}
-										<button type="button" class="btn btn-default btn-xs" id="delBtn" onClick="showDelete()">Delete</button>
-										<a href="Annotationdelete{{target_vod.id}}/{{ post.id }}" class="confirm">yes</a>
-										<a href="#" class="confirm" onClick="hideDelete()">no</a>
-									{% endif %}
-								{% endif %}
-							</p>
-						</div>
-						<div class="row">
-							{{post.body|safe|linebreaks}}
-						</div>
-						<div class="row">
-							<p>
-								<a href="javascript:skipTo({{ post.time }})" class="time-control">{{ post.formatTime }}</a> | <a href="javascript:skipTo({{ post.time }}, true)" class="time-control">Half Speed</a>
-							</p>
-						</div>
 					</div>
 				</div>
-			{% endfor %}
+			{% endif %}
+			<!--Comments, only display if there exists comments-->
+			{% if target_posts %}
+				<div class="panel" id="comment-pane">
+				{% for post in target_posts %}
+					<div class="post-box">
+						<div class="row">
+							<div class="row">
+								<p>
+									<a name="up" class="btn btn-default btn-xs" href="Annotationvote{{target_vod.id}}/{{ post.id }}"><span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span></a>
+									<a href="Profile{{ post.user.id }}">{{post.user.username}}</a> &nbsp;&nbsp; {{post.vote_count}} votes {{post.date|timesince}} ago
+									<!--a delete button if the poster is the current user-->
+									{% if user.is_authenticated %}
+										{% if user.id == post.user.id %}
+											<button type="button" class="btn btn-default btn-xs" id="delBtn" onClick="showDelete()">Delete</button>
+											<a href="Annotationdelete{{target_vod.id}}/{{ post.id }}" class="confirm">yes</a>
+											<a href="#" class="confirm" onClick="hideDelete()">no</a>
+										{% endif %}
+									{% endif %}
+								</p>
+							</div>
+							<div class="row">
+								{{post.body|safe|linebreaks}}
+							</div>
+							<div class="row">
+								<p>
+									<a href="javascript:skipTo({{ post.time }})" class="time-control">{{ post.formatTime }}</a> | <a href="javascript:skipTo({{ post.time }}, true)" class="time-control">Half Speed</a>
+								</p>
+							</div>
+						</div>
+					</div>
+				{% endfor %}
+				</div>
 			{% endif %}
 		</div>
 	</div>
