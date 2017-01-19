@@ -55,7 +55,7 @@
 				<a class="home-page" href="Profile{{ vod.user.id }}">{{vod.user.username}}</a> {{vod.date|timesince}} ago
 				<!--a delete button if the poster is the current user-->
 				{% if user.is_authenticated %}
-					{% if user.id == vod.user.id %}
+					{% if user.id == vod.user.id or user.is_superuser %}
 						<button type="button" class="btn btn-default btn-xs" id="delBtn" onClick="showDelete()">Delete</button>
 						<a href="AnnotationdeleteVod{{vod.id}}" class="confirm home-page">yes</a>
 						<a href="#" class="confirm home-page" onClick="hideDelete()">no</a>

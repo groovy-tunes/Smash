@@ -45,7 +45,7 @@
 									<a href="Profile{{ post.user.id }}">{{post.user.username}}</a> &nbsp;&nbsp; {{post.vote_count}} votes {{post.date|timesince}} ago
 									<!--a delete button if the poster is the current user-->
 									{% if user.is_authenticated %}
-										{% if user.id == post.user.id %}
+										{% if user.id == post.user.id  or user.is_superuser %}
 											<button type="button" class="btn btn-default btn-xs" id="delBtn" onClick="showDelete()">Delete</button>
 											<a href="Annotationdelete{{target_vod.id}}/{{ post.id }}" class="confirm">yes</a>
 											<a href="#" class="confirm" onClick="hideDelete()">no</a>
