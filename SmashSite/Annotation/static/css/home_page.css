@@ -21,6 +21,7 @@ h4{
     margin-bottom: 14.5em;
 }
 
+/* The padding makes sure the text stays within the div */
 #comment-pane{
     padding-left: 2em;
     padding-right: 1.6em;
