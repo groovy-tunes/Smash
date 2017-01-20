@@ -23,6 +23,8 @@ h4{
 
 #comment-pane{
     padding-left: 2em;
+    padding-right: 1.6em;
+    word-wrap: break-word;
 }
 
 .home-page{
