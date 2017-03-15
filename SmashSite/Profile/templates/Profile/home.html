@@ -19,17 +19,17 @@
 		<h2 style="text-align:center;">Commented Video History</h2>
 			{% for vod in vods_list %}
 				<div class="col-xs-6 col-md-3">
-					<h2 style="display:inline"><a href="Annotation{{ vod.id }}">{{ vod.title }}</a></h2>
-					<p style="display:inline;">
-					<a href="Profile{{ vod.user.id }}">{{vod.user.username}}</a> {{vod.date|timesince}} ago
-					<!--a delete button if the poster is the current user-->
-					{% if user.is_authenticated %}
-						{% if user.id == vod.user.id %}
-							<button type="button" class="btn btn-default btn-xs" id="delBtn" onClick="showDelete()">Delete</button>
-							<a href="AnnotationdeleteVod{{vod.id}}" class="confirm">yes</a>
-							<a href="#" class="confirm" onClick="hideDelete()">no</a>
+					<h2><a href="Annotation{{ vod.id }}">{{ vod.title }}</a></h2>
+					<p>
+						<a href="Profile{{ vod.user.id }}">{{vod.user.username}}</a> {{vod.date|timesince}} ago
+						<!--a delete button if the poster is the current user-->
+						{% if user.is_authenticated %}
+							{% if user.id == vod.user.id or user.is_superuser %}
+								<button type="button" class="btn btn-default btn-xs" id="delBtn" onClick="showDelete()">Delete</button>
+								<a href="AnnotationdeleteVod{{vod.id}}" class="confirm">yes</a>
+								<a href="#" class="confirm" onClick="hideDelete()">no</a>
+							{% endif %}
 						{% endif %}
-					{% endif %}
 					</p>
 					<a href="Annotation{{ vod.id }}" class="thumbnail">
 						<img src="https://img.youtube.com/vi/{{ vod.return_youtube_id }}/mqdefault.jpg">
@@ -50,9 +50,7 @@
 					<a href="Profile{{ vod.user.id }}">{{vod.user.username}}</a> {{vod.date|timesince}} ago
 					<!--a delete button if the poster is the current user-->
 					{% if user.is_authenticated %}
-						{% if user.id == vod.user.id %}
-							{{ user.id }}
-					{{ vod.user.id }}
+						{% if user.id == vod.user.id or user.is_superuser %}
 							<button type="button" class="btn btn-default btn-xs" id="delBtn" onClick="showDelete()">Delete</button>
 							<a href="AnnotationdeleteVod{{vod.id}}" class="confirm">yes</a>
 							<a href="#" class="confirm" onClick="hideDelete()">no</a>
@@ -66,7 +64,7 @@
 		{% endfor %}
 	</div>
 </div>
+{% load staticfiles %}
 <script src = "{% static 'js/profilescript.js' %}"></script>
-<div>
 
 {% endblock %}

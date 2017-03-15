@@ -1,0 +1,33 @@
+body {
+    background: url('../images/marth.png');
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-attachment: fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+h4{
+    color: white;
+}
+
+#comment-box{
+    padding: 2em 2em 2em 2em;
+}
+
+#comment-form{
+    margin-bottom: 14.5em;
+}
+
+/* The padding makes sure the text stays within the div */
+#comment-pane{
+    padding-left: 2em;
+    padding-right: 1.6em;
+    word-wrap: break-word;
+}
+
+.home-page{
+    color: white;
+}
