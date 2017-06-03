@@ -1,0 +1,70 @@
+{% extends "Annotation/header.html" %}
+
+{% block content %}
+<div class="container-fluid">
+<!--The header for the user-->
+<div class="col-md-6 col-md-offset-3">
+	<div class="row">
+		<p>
+		<h3>
+			{{target_user.username}}
+		</h3>
+		</p>
+	</div>
+</div>
+
+<!--This panel is for the user's videos that he/she commented on-->
+<div class="col-md-12">
+	<div class="row panel panel-default">
+		<h2 style="text-align:center;">Commented Video History</h2>
+			{% for vod in vods_list %}
+				<div class="col-xs-6 col-md-3">
+					<h2><a href="Annotation{{ vod.id }}">{{ vod.title }}</a></h2>
+					<p>
+						<a href="Profile{{ vod.user.id }}">{{vod.user.username}}</a> {{vod.date|timesince}} ago
+						<!--a delete button if the poster is the current user-->
+						{% if user.is_authenticated %}
+							{% if user.id == vod.user.id or user.is_superuser %}
+								<button type="button" class="btn btn-default btn-xs" id="delBtn" onClick="showDelete()">Delete</button>
+								<a href="AnnotationdeleteVod{{vod.id}}" class="confirm">yes</a>
+								<a href="#" class="confirm" onClick="hideDelete()">no</a>
+							{% endif %}
+						{% endif %}
+					</p>
+					<a href="Annotation{{ vod.id }}" class="thumbnail">
+						<img src="https://img.youtube.com/vi/{{ vod.return_youtube_id }}/mqdefault.jpg">
+					</a>
+				</div>
+			{% endfor %}
+	</div>
+</div>
+
+<!--This panel is for the user's videos that he/she has posted-->
+<div class="col-md-12">
+	<div class="row panel panel-default">
+		<h2 style="text-align:center;">Video History</h2>
+		{% for vod in user_vods %}
+			<div class="col-xs-6 col-md-3">
+				<h2><a href="Annotation{{ vod.id }}">{{ vod.title }}</a></h2>
+				<p>
+					<a href="Profile{{ vod.user.id }}">{{vod.user.username}}</a> {{vod.date|timesince}} ago
+					<!--a delete button if the poster is the current user-->
+					{% if user.is_authenticated %}
+						{% if user.id == vod.user.id or user.is_superuser %}
+							<button type="button" class="btn btn-default btn-xs" id="delBtn" onClick="showDelete()">Delete</button>
+							<a href="AnnotationdeleteVod{{vod.id}}" class="confirm">yes</a>
+							<a href="#" class="confirm" onClick="hideDelete()">no</a>
+						{% endif %}
+					{% endif %}
+				</p>
+				<a href="Annotation{{ vod.id }}" class="thumbnail">
+					<img src="https://img.youtube.com/vi/{{ vod.return_youtube_id }}/mqdefault.jpg">
+				</a>
+			</div>
+		{% endfor %}
+	</div>
+</div>
+{% load staticfiles %}
+<script src = "{% static 'js/profilescript.js' %}"></script>
+
+{% endblock %}

@@ -41,8 +41,8 @@
 						<div class="row">
 							<div class="row">
 								<p>
-									<a name="up" class="btn btn-default btn-xs" href="Annotationvote{{target_vod.id}}/{{ post.id }}"><span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span></a>
-									<a href="Profile{{ post.user.id }}">{{post.user.username}}</a> &nbsp;&nbsp; {{post.vote_count}} votes {{post.date|timesince}} ago
+									<button type="button" name="up" class="btn btn-default btn-xs" onclick="vote({{target_vod.id}}, {{post.id}})"><span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span></button>
+									<a href="Profile{{ post.user.id }}">{{post.user.username}}</a> &nbsp;&nbsp; <span id="vote-count-{{post.id}}">{{post.vote_count}}</span> votes {{post.date|timesince}} ago
 									<!--a delete button if the poster is the current user-->
 									{% if user.is_authenticated %}
 										{% if user.id == post.user.id  or user.is_superuser %}
@@ -70,5 +70,16 @@
 	</div>
 </div>
 {% load static %}
-<script src = "{% static 'js/postscript.js' %}"></script>
+	<script src = "{% static 'js/postscript.js' %}"></script>
+	<script>
+		/**
+		*Sends an ajax request, updating
+		*/
+		function vote(vodId, postId){
+			url = "Annotationvote" + vodId + "/" + postId;
+			$.ajax(url).done(function(data){
+				$('#vote-count-' + postId).html(data);
+			});
+		}
+	</script>
 {% endblock %}

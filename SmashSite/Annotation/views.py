@@ -3,7 +3,7 @@ from django.views.generic import ListView
 from Annotation.models import Vod, Post
 from Annotation.forms import PostForm, VodForm
 import datetime
-from django.http import HttpResponseRedirect, Http404
+from django.http import HttpResponseRedirect, Http404, HttpResponse
 from django.urls import reverse
 import math
 
@@ -27,9 +27,9 @@ def post(request, key):
                 return HttpResponseRedirect(reverse("Annotation-post",args=[key]))
             else:
                 print(form.errors)
-                
+
     #loads the form for input if not POST
-    else:          
+    else:
         form = PostForm()
 
     #using vod object, retrieves all its posts and renders
@@ -37,7 +37,7 @@ def post(request, key):
     context = {'target_vod': target_vod, 'target_posts': target_posts, 'form':form}
 
     return render(request, 'Annotation/post.html', context)
-    
+
 def vod(request, page):
     #acquires 24 vods
     page = int(page)
@@ -45,7 +45,7 @@ def vod(request, page):
     end = start + 24
     queryset = Vod.objects.all().order_by("-date")[start:end]
 
-    
+
     if request.method == "POST":
         form = VodForm(request.POST)
         user = request.user
@@ -57,7 +57,7 @@ def vod(request, page):
                 return HttpResponseRedirect(reverse("Annotation-feed", kwargs={'page':0}))
             else:
                 print(form.errors)
-    else:     
+    else:
         form = VodForm()
 
     #used to determine whether to display pages
@@ -68,7 +68,7 @@ def vod(request, page):
         previous = True
     if pages > (page + 1) * 24:
         after = True
-    
+
     context = {'object_list':queryset, 'form':form, 'page':page, 'previous':previous, 'after':after}
 
     return render(request, 'Annotation/home.html', context)
@@ -80,7 +80,7 @@ def vote(request,vkey, key):
         target_post = Post.objects.get(pk=int(key))
     except Post.DoesNotExist:
         raise Http404("Post does not exist")
-    
+
     if user is not None:
         #user can only upvote or remove previous vote
         if target_post.votes.exists(user.id):
@@ -89,9 +89,9 @@ def vote(request,vkey, key):
             target_post.votes.up(user.id)
         target_post.vote_count = target_post.votes.count()
         target_post.save()
-            
-    return redirect(post, key=int(vkey))
-            
+
+    return HttpResponse(target_post.vote_count)
+
 def delete(request, vkey, key):
     user = request.user
     try:
@@ -103,7 +103,7 @@ def delete(request, vkey, key):
         target_post.delete()
 
     return redirect(post, key=int(vkey))
-        
+
 def delete_vod(request, vkey):
     user = request.user
     try:
@@ -122,6 +122,5 @@ def search(request, search_text):
     search_vods = Vod.objects.filter(title__contains=search_text).order_by("-date")
     form = VodForm()
     context = {'object_list':search_vods, 'form':form}
-    
+
     return render(request, 'Annotation/search.html', context)
-    
