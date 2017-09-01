@@ -4,4 +4,4 @@ Smash 'Nalysis is a peer-analysis website for video games that uses Youtube time
 
 ![The Site](/screenshot.png "The Site!")
 
-Currently you can enjoy the site at vods.jeremychinsen.me  
+Smash 'Nalysis used to be hosted at vods.jeremychinsen.me but I have taken it down recently. Here is a demo of the site: https://www.youtube.com/watch?v=p3rRXKul4S4&feature=youtu.be
